@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>QR Code Generator</title>
+    <style media="screen">
+      #qr-code {
+        margin: 60px auto 0;
+      }
+
+      #qr-code img {
+        margin: 0 auto;
+        width: 200px;
+      }
+
+      .plain-url {
+        margin-top: 20px;
+        text-align: center;
+        font-size: 24px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="qr-code"></div>
+    <p class="plain-url"></p>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="qrcode.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
