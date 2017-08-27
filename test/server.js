@@ -1,7 +1,7 @@
 import express from 'express'
 import plugin from '../src/index'
 
-const app = plugin(express(), {entry: '/entry.html'})
+const app = plugin(express(), {entryPath: '/entry.html'})
 
 const port = process.env.PORT || 8080
 

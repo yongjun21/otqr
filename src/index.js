@@ -5,9 +5,8 @@ import crypto from 'crypto'
 
 export default function (app, options = {}) {
   const _options = {
-    root: 'http://localhost:8080',
-    entry: '/',
-    endpoint: '/qr'
+    entryPath: '/',
+    qrPath: '/qr'
   }
   Object.assign(_options, options)
 
@@ -28,7 +27,7 @@ export default function (app, options = {}) {
     })
   })
 
-  app.get(_options.entry, function (req, res, next) {
+  app.get(_options.entryPath, function (req, res, next) {
     if (!('token' in req.query)) return res.sendStatus(403)
     if (!(req.query.token in connected)) return res.sendStatus(403)
 
@@ -44,13 +43,16 @@ export default function (app, options = {}) {
     next()
   })
 
-  app.get(_options.endpoint + '/script.js', function (req, res) {
+  app.get(_options.qrPath + '/script.js', function (req, res) {
     res.send(`
       var socket = io()
       var qr = new QRCode('qr-code')
       socket.on('update QR', function (token) {
         console.log('QR updated')
-        var url = '${_options.root}${_options.entry}?token=' + token
+        var query = window.location.search
+        query += query ? '&' : '?'
+        query += 'token=' + token
+        var url = window.location.origin + '${_options.entryPath}' + query
         qr.clear()
         qr.makeCode(url)
         document.querySelector('.plain-url').textContent = url
@@ -58,7 +60,7 @@ export default function (app, options = {}) {
     `)
   })
 
-  app.use(_options.endpoint, express.static(publicPath))
+  app.use(_options.qrPath, express.static(publicPath))
 
   app.listen = function () {
     return server.listen.apply(server, arguments)
